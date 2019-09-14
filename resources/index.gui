@@ -1,3 +1,23 @@
-<svg>
-  <rect id="background" />
+<svg class='bgColor' width='100%' height='100%'>
+  <!-- <section id='viewport' x='6' y='12' width='100%-12' height='100%-24'>
+    <section id='batteryImg' x='0' y='0' width='60%' height='35%'>
+      <rect x='0' y='0' width='100%' height='100%' fill='lightblue' />
+      <section x='6' y='12' width='100%-12' height='100%-24'>
+        <rect id="battery" x="10%" y="0" width="80%-10" height="100%" fill='white' />
+        <rect x='90%-10' y='30%' width='10' height='40%' fill='white' />
+        <rect id='batteryBg' x='10%+2' y='2' width='80%-14' height='100%-4' fill='gray' />
+        <rect id='batteryCharge' x='10%+2' y='2' width='29%-14' height='100%-4' fill='red' />
+      </section>
+    </section>
+    <section id="batteryPct" x='60%+1' y='0' width='40%' height='35%'>
+      <rect x='0' y='0' width='100%' height='100%' fill='lightgreen' />
+      <text x='50%' y='50%+20' text-anchor='middle' font-size='50'>100%</text>
+    </section>
+    <section id="charging" x='0' y='35%+1' width='100%' height='65%'>
+      <rect x='0' y='0' width='100%' height='100%' fill='orange' />
+      <text>Not connected</text>
+    </section>
+  </section> -->
+<text x='0' y='250' fill='red'>10</text> 
+<rect x='330' y='0' width='10' height='250' fill='yellow' />
 </svg>

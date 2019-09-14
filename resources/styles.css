@@ -10,3 +10,12 @@
   height: 100%;
   fill: white;
 }
+
+.bgColor {
+  fill: black;
+}
+
+text {
+  fill: white;
+  font-size: 250;
+}
