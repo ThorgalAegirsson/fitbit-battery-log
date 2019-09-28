@@ -14,8 +14,10 @@
 .bgColor {
   fill: black;
 }
-
+#lastCharged>text {
+  text-length: 32;
+}
 text {
   fill: white;
-  font-size: 250;
+  font-size: 16;
 }
