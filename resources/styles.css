@@ -5,6 +5,12 @@
   text-length: 32;
 }
 
+.viewport {
+  x: 6;
+  y: 24;
+  width: 100%-12;
+  height: 100%-36;
+}
 #background {
   width: 100%;
   height: 100%;
@@ -14,7 +20,7 @@
 .bgColor {
   fill: black;
 }
-#lastCharged>text {
+#lastCharged > text {
   text-length: 32;
 }
 text {

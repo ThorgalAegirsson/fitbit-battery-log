@@ -1,38 +1,57 @@
 <svg class='bgColor' width='100%' height='100%'>
-  <section id='viewport' x='6' y='12' width='100%-12' height='100%-24'>
-    <section id='batteryInfo' x='0' y='0' width='100%' height='50%'>
-      <text x='0' y='16'>Battery level:</text>
-      <!-- battery image; margin x=6, y=12 -->
-      <rect x='20+6' y='20+12' width='201-46-10' height='93-24' fill='white' />
-      <rect x='145+26' y='20+12+21' width='10' height='27' fill='white' />
-      <!-- battery inside background -->
-      <rect x='28' y='34' width='141' height='65' fill='gray' />
-      <!-- battery charge level background -->
-      <rect id='batteryCharge' x='28' y='34' width='0' height='65' fill='red' />
+  <use id="container" href="#panoramaview">
+    <!-- FIRST PAGE -->
+    <use id="item1" href="#panoramaview-item">
+      <section class='viewport'>
+        <text id='connectState' text-length='32' x='50%' y='40' font-size='24' text-anchor="middle">Unplugged</text>
+        <!-- <text id='chargeState' x='50%' y='$+20' font-size='24' text-anchor='middle'>Not charging</text> -->
+        <section id='batteryInfo' x='0' y='$' width='100%' height='50%'>
+          <!-- battery image; margin x=6, y=12 -->
+          <rect x='20+6' y='20+12' width='201-46-10' height='93-24' fill='white' />
+          <rect x='145+26' y='20+12+21' width='10' height='27' fill='white' />
+          <!-- battery inside background -->
+          <rect x='28' y='34' width='141' height='65' fill='gray' />
+          <!-- battery charge level background -->
+          <rect id='batteryCharge' x='28' y='34' width='0' height='65' fill='red' />
 
-      <section id="batteryPct" x='60%' y='20' width='40%' height='100%-20'>
-        <text x='50%' y='50%+20' text-anchor='middle' font-size='50' id='batteryValue'>100%</text>
-      </section>
-
-      <!-- <section id='batteryImg' x='0' y='20' width='60%' height='100%-20'>
-        <rect x='0' y='0' width='100%' height='100%' fill='lightblue' />
-        <section x='6' y='12' width='100%-12' height='100%-24'>
-          <rect id="battery" x="10%" y="0" width="80%-10" height="100%" fill='white' />
-          <rect x='90%-10' y='30%' width='10' height='40%' fill='white' />
-          <rect id='batteryBg' x='10%+2' y='2' width='80%-14' height='100%-4' fill='gray' />
-          <rect id='batteryCharge' x='10%+2' y='2' width='29%-14' height='100%-4' fill='red' />
+          <section id="batteryPct" x='60%' y='20' width='40%' height='100%-20'>
+            <text x='50%' y='50%+20' text-anchor='middle' font-size='50' id='batteryValue'>100%</text>
+          </section>
         </section>
-      </section> -->
-      
-    </section>
-    <section id="chargingInfo" x='0' y='50%' width='100%' height='50%'>
-      <line x1="10" y1="1" x2="100%-20" y2="1" fill="white" stroke-width="2" />
-      <text id='connectState' text-length='32' x='0' y='$+16'>Charger disconnected</text>
-      <section id="lastCharged" x='0' y='$+10' width='100%' height='100%-20'>
-        <text x='0' y='16'>Last charged on:</text>
+        
+      </section>
+    </use>
+    <!-- SECOND PAGE -->
+    <use id="item2" href="#panoramaview-item">
+      <section class='viewport'>
+        <text x='50%' y='40' font-size='24' text-anchor="middle">Last charged on:</text>
         <text id='lastChargedDate' x='0'>---</text>
         <text id='lastChargedTime' x='$+10'>---</text>
+        <text x='0' y='$'>Time since last charge:</text>
+        <text x='0' y='$'>4 days 3 hours 2 min</text>
       </section>
-    </section>
-  </section>
+    </use>
+    <use id="item3" href="#panoramaview-item">
+      <section class='viewport'>
+        <text x='50%' y='40' font-size='24' text-anchor="middle">Since last charge</text>
+        <text x='0' y='$'>[INSERT A CHART HERE]</text>
+      </section>
+    </use>
+    <use id="item4" href="#panoramaview-item">
+      <section class="viewport">
+        <text x='50%' y='40' font-size='24' text-anchor="middle">TIME BETWEEN CHARGES</text>
+        <text x='0' y='$'>[INSERT A CHART HERE]</text>
+      </section>
+    </use>
+
+    <!-- Have enough pagination dots for your slides (extras are hidden) -->
+    <use id="pagination-dots" href="#pagination-widget" y="8">
+      <use href="#pagination-dot" />
+      <use href="#pagination-dot" />
+      <use href="#pagination-dot" />
+      <use href="#pagination-dot" />
+      <use href="#pagination-dot" />
+      <use href="#pagination-highlight-dot" />
+    </use>
+  </use>
 </svg>
