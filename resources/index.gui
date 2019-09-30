@@ -25,10 +25,9 @@
     <use id="item2" href="#panoramaview-item">
       <section class='viewport'>
         <text x='50%' y='40' font-size='24' text-anchor="middle">Last charged on:</text>
-        <text id='lastChargedDate' x='0'>---</text>
-        <text id='lastChargedTime' x='$+10'>---</text>
-        <text x='0' y='$'>Time since last charge:</text>
-        <text x='0' y='$'>4 days 3 hours 2 min</text>
+        <text id='lastChargedDate' x='50%' text-anchor='middle' text-length='20' font-size='30' y='$+5'>---</text>
+        <text x='50%' y='60%' font-size='24' text-anchor="middle">Time since last charge:</text>
+        <text id='timeSinceLastCharge' x='50%' text-anchor='middle' text-length='20' font-size='30' y='$+5'>4 days 3 hours 2 min</text>
       </section>
     </use>
     <use id="item3" href="#panoramaview-item">
