@@ -2,10 +2,10 @@
   <use id="container" href="#panoramaview">
     <!-- FIRST PAGE -->
     <use id="item1" href="#panoramaview-item">
-      <section class='viewport'>
+      <section x='6' y='24' width='100%-12' height='100%-36'>
         <text id='connectState' text-length='32' x='50%' y='40' font-size='24' text-anchor="middle">Unplugged</text>
         <!-- <text id='chargeState' x='50%' y='$+20' font-size='24' text-anchor='middle'>Not charging</text> -->
-        <section id='batteryInfo' x='0' y='$' width='100%' height='50%'>
+        <section x='0' y='$' width='100%' height='50%'>
           <!-- battery image; margin x=6, y=12 -->
           <rect x='20+6' y='20+12' width='201-46-10' height='93-24' fill='white' />
           <rect x='145+26' y='20+12+21' width='10' height='27' fill='white' />
@@ -14,7 +14,7 @@
           <!-- battery charge level background -->
           <rect id='batteryCharge' x='28' y='34' width='0' height='65' fill='red' />
 
-          <section id="batteryPct" x='60%' y='20' width='40%' height='100%-20'>
+          <section x='60%' y='20' width='40%' height='100%-20'>
             <text x='50%' y='50%+20' text-anchor='middle' font-size='50' id='batteryValue'>100%</text>
           </section>
         </section>
@@ -23,21 +23,21 @@
     </use>
     <!-- SECOND PAGE -->
     <use id="item2" href="#panoramaview-item">
-      <section class='viewport'>
+      <section x='6' y='24' width='100%-12' height='100%-36'>
         <text x='50%' y='40' font-size='24' text-anchor="middle">Last charged on:</text>
         <text id='lastChargedDate' x='50%' text-anchor='middle' text-length='20' font-size='30' y='$+5'>---</text>
         <text x='50%' y='60%' font-size='24' text-anchor="middle">Time since last charge:</text>
-        <text id='timeSinceLastCharge' x='50%' text-anchor='middle' text-length='20' font-size='30' y='$+5'>4 days 3 hours 2 min</text>
+        <text id='timeSinceLastCharge' x='50%' text-anchor='middle' text-length='20' font-size='30' y='$+5'>-d -h -m</text>
       </section>
     </use>
     <use id="item3" href="#panoramaview-item">
-      <section class='viewport'>
+      <section x='6' y='24' width='100%-12' height='100%-36'>
         <text x='50%' y='40' font-size='24' text-anchor="middle">Since last charge</text>
         <text x='0' y='$'>[INSERT A CHART HERE]</text>
       </section>
     </use>
     <use id="item4" href="#panoramaview-item">
-      <section class="viewport">
+      <section x='6' y='24' width='100%-12' height='100%-36'>
         <text x='50%' y='40' font-size='24' text-anchor="middle">TIME BETWEEN CHARGES</text>
         <text x='0' y='$'>[INSERT A CHART HERE]</text>
       </section>
