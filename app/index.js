@@ -42,6 +42,30 @@ const convertDate = time => {
 const updateLastChargedDateField = date => {
     lastChargedDateField.text = `${date.getFullYear()}-${('0' + (date.getMonth() + 1)).slice(-2)}-${('0' + date.getDate()).slice(-2)}  ${('0' + date.getHours()).slice(-2)}:${('0' + date.getMinutes()).slice(-2)}`;
 };
+const chargeColor = batteryLevel => {
+    let color;
+    switch (true) {
+        case batteryLevel < 20:
+            color = 'red';
+            break;
+        case batteryLevel < 40:
+            color = 'orange';
+            break;
+        case batteryLevel < 60:
+            color = 'yellow';
+            break;
+        case batteryLevel < 80:
+            color = 'magenta';
+            break;
+        case batteryLevel < 90:
+            color = 'lightgreen';
+            break;
+        default:
+            color = 'green';
+            break;
+    }
+    batteryCharge.style.fill = color;
+};
 
 try {
     connectDate = fs.readFileSync('lastCharged.txt', 'cbor');
@@ -52,7 +76,8 @@ try {
 // init GUI
 let chargerStartState = charger.connected; // set to distinguish the first charger events
 batteryValue.text = `${battery.chargeLevel}%`;
-batteryCharge.width = BATTERY_WIDTH*battery.chargeLevel/100;
+batteryCharge.width = BATTERY_WIDTH * battery.chargeLevel / 100;
+chargeColor(battery.chargeLevel);
 connectState.text = charger.connected ? charger.powerIsGood ? 'Plugged in, charging' : 'Plugged in, not charging' : 'Unplugged';
 
 if (connectDate) {
@@ -81,6 +106,7 @@ console.log(`charger power is good: ${charger.powerIsGood}`);
 battery.onchange = evt => {
     batteryValue.text = `${battery.chargeLevel}%`;
     batteryCharge.width = BATTERY_WIDTH * battery.chargeLevel / 100;
+    chargeColor(battery.chargeLevel);
 };
 
 charger.onchange = evt => {

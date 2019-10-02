@@ -12,8 +12,13 @@
           <!-- battery inside background -->
           <rect x='28' y='34' width='141' height='65' fill='gray' />
           <!-- battery charge level background -->
-          <rect id='batteryCharge' x='28' y='34' width='0' height='65' fill='red' />
-
+          <!-- <gradientRect id='batteryCharge' x='28' y='34' width='0' height='65' 
+            gradient-type="linear"
+            gradient-x1='0' gradient-y1='0'
+            gradient-x2='100%' gradient-y2='0'
+            gradient-color1='red' gradient-color2='green'  
+          /> -->
+          <rect id='batteryCharge' x='28' y='34' width='0' height='65' />
           <section x='60%' y='20' width='40%' height='100%-20'>
             <text x='50%' y='50%+20' text-anchor='middle' font-size='50' id='batteryValue'>100%</text>
           </section>
