@@ -1,4 +1,5 @@
 import { battery, charger } from 'power';
+import { me } from 'appbit';
 import clock from 'clock';
 import document from 'document';
 import * as fs from 'fs';
@@ -93,11 +94,15 @@ charger.onchange = evt => {
         console.log(`CHARGER charger connected: ${charger.connected}`);
         connectState.text = charger.connected ? charger.powerIsGood ? 'Plugged in, charging' : 'Plugged in, not charging' : 'Unplugged';
         if (!charger.connected) {
+            me.appTimeoutEnabled = true;
             connectDate = new Date();
             // save the date to a file on the device, later utilize companion and/or cloud
             fs.writeFileSync('lastCharged.txt', connectDate.valueOf(), 'cbor');
             //date and time update
             updateLastChargedDateField(connectDate);
+        }
+        if (charger.connected) {
+            me.appTimeoutEnabled = false;
         }
         timeSinceLastCharge.text = `0d 00h 00m`;
     }
