@@ -46,22 +46,31 @@ const chargeColor = batteryLevel => {
     let color;
     switch (true) {
         case batteryLevel < 20:
-            color = 'red';
+            color = '#c00';
+            break;
+        case batteryLevel < 30:
+            color = '#c30';
             break;
         case batteryLevel < 40:
-            color = 'orange';
+            color = '#c60';
+            break;
+        case batteryLevel < 50:
+            color = '#c90';
             break;
         case batteryLevel < 60:
-            color = 'yellow';
+            color = '#cc0';
+            break;
+        case batteryLevel < 70:
+            color = '#9c0';
             break;
         case batteryLevel < 80:
-            color = 'magenta';
+            color = '#6c0';
             break;
         case batteryLevel < 90:
-            color = 'lightgreen';
+            color = '#3c0';
             break;
         default:
-            color = 'green';
+            color = '#0c0';
             break;
     }
     batteryCharge.style.fill = color;
