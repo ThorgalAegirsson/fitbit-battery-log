@@ -1,9 +1,11 @@
 import { battery, charger } from 'power';
+import { display } from 'display';
 import { me } from 'appbit';
 import clock from 'clock';
 import document from 'document';
 import * as fs from 'fs';
 
+import { convertDate, chargeColor, updateLastChargedDateField } from './utils';
 
 // DOM refs
 const batteryValue = document.getElementById('batteryValue');
@@ -20,80 +22,32 @@ let currentIndex = container.value;
 container.value = 0; // jump to first slide
 clock.granularity = 'minutes';
 let connectDate = null;
+let chargerStartState = charger.connected; // set to distinguish the first charger events
 
-const convertDate = time => {
-    let cd = 24 * 60 * 60 * 1000,
-        ch = 60 * 60 * 1000,
-        days = Math.floor(time / cd),
-        hrs = Math.floor((time - days * cd) / ch),
-        mins = Math.round((time - days * cd - hrs * ch) / 60000),
-        pad = n => n < 10 ? '0' + n : n;
+console.log('=== APP INIT ===');
+console.log(`charger connected: ${charger.connected}`);
+console.log(`charger power is good: ${charger.powerIsGood}`);
 
-    if (mins === 60) {
-        hrs++;
-        mins = 0;
-    }
-    if (hrs === 24) {
-        days++;
-        hrs = 0;
-    }
-    return [days, pad(hrs), pad(mins)];
-};
-const updateLastChargedDateField = date => {
-    lastChargedDateField.text = `${date.getFullYear()}-${('0' + (date.getMonth() + 1)).slice(-2)}-${('0' + date.getDate()).slice(-2)}  ${('0' + date.getHours()).slice(-2)}:${('0' + date.getMinutes()).slice(-2)}`;
-};
-const chargeColor = batteryLevel => {
-    let color;
-    switch (true) {
-        case batteryLevel < 20:
-            color = '#c00';
-            break;
-        case batteryLevel < 30:
-            color = '#c30';
-            break;
-        case batteryLevel < 40:
-            color = '#c60';
-            break;
-        case batteryLevel < 50:
-            color = '#c90';
-            break;
-        case batteryLevel < 60:
-            color = '#cc0';
-            break;
-        case batteryLevel < 70:
-            color = '#9c0';
-            break;
-        case batteryLevel < 80:
-            color = '#6c0';
-            break;
-        case batteryLevel < 90:
-            color = '#3c0';
-            break;
-        default:
-            color = '#0c0';
-            break;
-    }
-    batteryCharge.style.fill = color;
-};
 
+// init first page
+batteryValue.text = `${battery.chargeLevel}%`;
+batteryCharge.width = BATTERY_WIDTH * battery.chargeLevel / 100;
+batteryCharge.style.fill = chargeColor(battery.chargeLevel);
+// chargeColor(battery.chargeLevel);
+connectState.text = charger.connected ? charger.powerIsGood ? 'Plugged in, charging' : 'Plugged in, not charging' : 'Unplugged';
+
+//init second page
 try {
     connectDate = fs.readFileSync('lastCharged.txt', 'cbor');
 } catch (e) {
     console.error('there was an error reading "lastCharged" file:');
     console.error(e);
 }
-// init GUI
-let chargerStartState = charger.connected; // set to distinguish the first charger events
-batteryValue.text = `${battery.chargeLevel}%`;
-batteryCharge.width = BATTERY_WIDTH * battery.chargeLevel / 100;
-chargeColor(battery.chargeLevel);
-connectState.text = charger.connected ? charger.powerIsGood ? 'Plugged in, charging' : 'Plugged in, not charging' : 'Unplugged';
-
 if (connectDate) {
     console.log('connectDate read from file');
     let now = new Date().valueOf();
-    updateLastChargedDateField(new Date(connectDate));
-    let [day, hr, min] = convertDate(now-connectDate);
+    lastChargedDateField.text = updateLastChargedDateField(new Date(connectDate));
+    let [day, hr, min] = convertDate(now - connectDate);
     // timeSinceLastCharge.text = `${day} ${day === 1 ? 'day' : 'days'} ${hr} ${hr === 1 ? 'hr' : 'hrs'} : ${min} ${min === 1 ? 'min' : 'mins'}`;
     timeSinceLastCharge.text = `${day}d ${hr}h ${min}m`;
 }
@@ -101,45 +55,55 @@ if (connectDate) {
 clock.ontick = e => {
     if (connectDate) {
         let now = e.date.valueOf();
-        updateLastChargedDateField(new Date(connectDate));
+        lastChargedDateField.text = updateLastChargedDateField(new Date(connectDate));
         let [day, hr, min] = convertDate(now - connectDate);
         timeSinceLastCharge.text = `${day}d ${hr}h ${min}m`;
     }
 };
 
+const checkChargerConnectState = () => {
+        console.log(`[CHARGER] charger connected: ${charger.connected}`);
+        // if (charger.connected === chargerStartState) {
+        //     // first change event fires when the app starts but only on the simulator as it seems - it must be a bug
+        //     //this part does not affect the real device
+        //     console.log('[CHARGER] first charger event canceled');
+        //     chargerStartState = null;
+        //     return;
+        // }
+        connectState.text = charger.connected ? charger.powerIsGood ? 'Plugged in, charging' : 'Plugged in, not charging' : 'Unplugged';
+        
+        if (charger.connected) {
+            // save the date to a file on the device, later utilize companion and/or cloud
+            connectDate = new Date();
+            fs.writeFileSync('lastCharged.txt', connectDate.valueOf(), 'cbor');
+            me.appTimeoutEnabled = false;
+            display.autoOff = false;
+            setInterval(() => { display.poke(); console.log('POKE') }, 1000);
+        }
+        timeSinceLastCharge.text = `0d 00h 00m`;
+        console.log('app timeout: ', me.appTimeoutEnabled);
 
-console.log('=== CHARGER ===');
-console.log(`charger connected: ${charger.connected}`);
-console.log(`charger power is good: ${charger.powerIsGood}`);
+}
 
+// UPDATE battery info
 battery.onchange = evt => {
     batteryValue.text = `${battery.chargeLevel}%`;
     batteryCharge.width = BATTERY_WIDTH * battery.chargeLevel / 100;
     chargeColor(battery.chargeLevel);
 };
 
+// UPDATE charging info
 charger.onchange = evt => {
-    if (charger.connected === chargerStartState) {
-        // first change event fires when the app starts but only on the simulator as it seems - it must be a bug
-        //this part does not affect the real device
-        console.log('first charger event canceled');
-        chargerStartState = null;
-        return;
-    } else {
-        console.log(`CHARGER charger connected: ${charger.connected}`);
-        connectState.text = charger.connected ? charger.powerIsGood ? 'Plugged in, charging' : 'Plugged in, not charging' : 'Unplugged';
-        if (!charger.connected) {
-            me.appTimeoutEnabled = true;
-            connectDate = new Date();
-            // save the date to a file on the device, later utilize companion and/or cloud
-            fs.writeFileSync('lastCharged.txt', connectDate.valueOf(), 'cbor');
-            //date and time update
-            updateLastChargedDateField(connectDate);
-        }
-        if (charger.connected) {
-            me.appTimeoutEnabled = false;
-        }
-        timeSinceLastCharge.text = `0d 00h 00m`;
+    console.log(' ==== CHARGER STATE CHANGED ==== ');
+    checkChargerConnectState();
+    if (!charger.connected) {
+        // save the date to a file on the device, later utilize companion and/or cloud
+        connectDate = new Date();
+        fs.writeFileSync('lastCharged.txt', connectDate.valueOf(), 'cbor');
+        me.appTimeoutEnabled = true;
+        //update date and time in GUI
+        lastChargedDateField.text = updateLastChargedDateField(connectDate);
     }
 };
 
+checkChargerConnectState();
