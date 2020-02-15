@@ -73,7 +73,7 @@ const checkChargerConnectState = () => {
 battery.onchange = evt => {
     batteryValue.text = `${battery.chargeLevel}%`;
     batteryCharge.width = BATTERY_WIDTH * battery.chargeLevel / 100;
-    chargeColor(battery.chargeLevel); // do I need it here? Or is it updated from init first page section?
+    batteryCharge.style.fill = chargeColor(battery.chargeLevel); // do I need it here? Or is it updated from init first page section?
 };
 
 // UPDATE charging info
