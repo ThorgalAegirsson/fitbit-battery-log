@@ -35,7 +35,7 @@
         <text id='timeSinceLastCharge' x='50%' text-anchor='middle' text-length='20' font-size='30' y='$+5'>-d -h -m</text>
       </section>
     </use>
-    <use id="item3" href="#panoramaview-item">
+    <!-- <use id="item3" href="#panoramaview-item">
       <section x='6' y='24' width='100%-12' height='100%-36'>
         <text x='50%' y='40' font-size='24' text-anchor="middle">Since last charge</text>
         <text x='0' y='$'>[INSERT A CHART HERE]</text>
@@ -46,7 +46,7 @@
         <text x='50%' y='40' font-size='24' text-anchor="middle">TIME BETWEEN CHARGES</text>
         <text x='0' y='$'>[INSERT A CHART HERE]</text>
       </section>
-    </use>
+    </use> -->
 
     <!-- Have enough pagination dots for your slides (extras are hidden) -->
     <use id="pagination-dots" href="#pagination-widget" y="8">
