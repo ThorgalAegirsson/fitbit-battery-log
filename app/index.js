@@ -1,5 +1,6 @@
 import { battery, charger } from 'power';
 import { display } from 'display';
+import { me as device } from 'device';
 import { me } from 'appbit';
 import clock from 'clock';
 import document from 'document';
@@ -14,7 +15,9 @@ const lastChargedDateField = document.getElementById('lastChargedDate');
 const timeSinceLastCharge = document.getElementById('timeSinceLastCharge');
 const container = document.getElementById("container");
 
-const BATTERY_WIDTH = 141;
+if (!device.screen) device.screen = { width: 348, height: 250 }
+const BATTERY_WIDTH = device.screen.width === 300 ? 200 : 139;
+
 // Get the selected index
 let currentIndex = container.value;
 // Set the selected index
@@ -60,7 +63,7 @@ const checkChargerConnectState = () => {
         saveInterval = setInterval(() => {
             connectDate = new Date();
             fs.writeFileSync('lastCharged.txt', connectDate.valueOf(), 'cbor');
-        }, 5000);
+        }, 30000);
         me.appTimeoutEnabled = false;
         //BELOW WILL BE AN OPTION FOR USER TO SET UP:
         // display.autoOff = false;
@@ -73,7 +76,7 @@ const checkChargerConnectState = () => {
 battery.onchange = evt => {
     batteryValue.text = `${battery.chargeLevel}%`;
     batteryCharge.width = BATTERY_WIDTH * battery.chargeLevel / 100;
-    batteryCharge.style.fill = chargeColor(battery.chargeLevel); // do I need it here? Or is it updated from init first page section?
+    batteryCharge.style.fill = chargeColor(battery.chargeLevel);
 };
 
 // UPDATE charging info

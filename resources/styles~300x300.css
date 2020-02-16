@@ -7,7 +7,7 @@ text {
   text-length: 32;
   x: 50%;
   y: 40;
-  font-size: 30;
+  font-size: 24;
   text-anchor: "middle"
 }
 
@@ -15,45 +15,45 @@ text {
   x: 0;
   y: $;
   width: 100%;
-  height: 50%;
+  /* height: 100%; */
 }
 
 #batteryBody {
-  x: 20+6;
-  y: 20+12;
-  width: 201-46-10;
+  x: 30+6;
+  y: 20;
+  width: 300-36-36-10-10;
   height: 93-24;
   fill: white;
 }
 
 #batteryTip {
-  x: 145+26;
-  y: 20+12+21;
+  x: 300-36-10-10;
+  y: 40;
   width: 10;
   height: 27;
   fill: white;
 }
 
 #batteryInside {
-  x: 29;
-  y: 34;
-  width: 139;
+  x: 40;
+  y: 22;
+  width: 200;
   height: 65;
   fill: gray;
 }
 
 #batteryCharge {
-  x: 29;
-  y: 34;
+  x: 40;
+  y: 22;
   width: 0;
   height: 65;
 }
 
 #batteryChargeValue {
-  x: 60%;
-  y: 20;
-  width: 40%;
-  height: 100%-20;
+  x: 0;
+  y: $+2;
+  width: 100%;
+  height: 120;
 }
 
 #batteryValue {
