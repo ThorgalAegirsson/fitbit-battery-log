@@ -5,6 +5,7 @@ import { me } from 'appbit';
 import clock from 'clock';
 import document from 'document';
 import * as fs from 'fs';
+import * as messaging from 'messaging';
 import { convertDate, chargeColor, updateLastChargedDateField } from './utils';
 
 // DOM refs
@@ -15,16 +16,25 @@ const lastChargedDateField = document.getElementById('lastChargedDate');
 const timeSinceLastCharge = document.getElementById('timeSinceLastCharge');
 const container = document.getElementById("container");
 
-if (!device.screen) device.screen = { width: 348, height: 250 }
-const BATTERY_WIDTH = device.screen.width === 300 ? 200 : 139;
-
 // Get the selected index
 let currentIndex = container.value;
 // Set the selected index
 container.value = 0; // jump to first slide
 clock.granularity = 'minutes';
+
+if (!device.screen) device.screen = { width: 348, height: 250 }
+const BATTERY_WIDTH = device.screen.width === 300 ? 200 : 139;
+
 let connectDate = null;
 let saveInterval = null;
+let displayOn = false;
+
+messaging.peerSocket.onmessage = e => {
+    // cancel interval so it's not recreated
+    clearInterval(saveInterval);
+    displayOn = e.data.value;
+    checkChargerConnectState();
+}
 
 const updateChargeInfo = e => {
     let now = e ? e.date.valueOf() : new Date().valueOf();
@@ -66,10 +76,15 @@ const checkChargerConnectState = () => {
         }, 30000);
         me.appTimeoutEnabled = false;
         //BELOW WILL BE AN OPTION FOR USER TO SET UP:
-        // display.autoOff = false;
-        // setInterval(() => { display.poke(); console.log('POKE') }, 5000);
+        if (displayOn) {
+            console.log('display is on');
+            display.autoOff = false;
+            setInterval(() => display.poke(), 5000);
+        } else {
+            console.log('display is off');
+        }
+        timeSinceLastCharge.text = `Charging...`;
     }
-    timeSinceLastCharge.text = `Charging...`;
 }
 
 // UPDATE battery info
