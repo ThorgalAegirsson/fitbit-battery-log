@@ -30,8 +30,6 @@ let saveInterval = null;
 let displayOn = false;
 
 messaging.peerSocket.onmessage = e => {
-    console.log(e.data.key);
-    console.log(e.data.value);
     if (e.data.key === 'toggle') {
         // cancel interval so it's not recreated
         clearInterval(saveInterval);
