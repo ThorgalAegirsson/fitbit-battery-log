@@ -30,10 +30,17 @@ let saveInterval = null;
 let displayOn = false;
 
 messaging.peerSocket.onmessage = e => {
-    // cancel interval so it's not recreated
-    clearInterval(saveInterval);
-    displayOn = e.data.value;
-    checkChargerConnectState();
+    console.log(e.data.key);
+    console.log(e.data.value);
+    if (e.data.key === 'toggle') {
+        // cancel interval so it's not recreated
+        clearInterval(saveInterval);
+        displayOn = e.data.value;
+        checkChargerConnectState();
+    }
+    if (e.data.key === 'fontColor') {
+        document.getElementsByTagName('text').forEach(element => element.style.fill = JSON.parse(e.data.value));
+    }
 }
 
 const updateChargeInfo = e => {
