@@ -1,4 +1,24 @@
 function settingsComponent(props) {
+  const colorSet = [
+    { color: "white" },
+    { color: "blanchedalmond" },
+    { color: "burlywood" },
+    { color: "orange" },
+    { color: "springgreen" },
+    { color: "limegreen" },
+    { color: "darkgreen" },
+    { color: "cadetblue" },
+    { color: "darkcyan" },
+    { color: "darkslategray" },
+    { color: "dodgerblue" },
+    { color: "blue" },
+    { color: "chocolate" },
+    { color: "pink" },
+    { color: "magenta" },
+    { color: "red" },
+    { color: "blueviolet" },
+    { color: "purple" },
+  ];
   return (
     <Page>
       <Section
@@ -9,40 +29,35 @@ function settingsComponent(props) {
         }
         description={
         }
-        />
+      />
       <Section>
         <Toggle
-          settingsKey='toggle'
-          label={`Display ${props.settings.toggle === 'true' ? 'on' : 'off'}`}
-          />
-          <Text>
-            You can set the display of your Fitbit device to be on or off during charging
+          settingsKey='display'
+          label={`Display ${props.settings.display === 'true' ? 'on' : 'off'}`}
+        />
+        <Text>
+          You can set the display of your Fitbit device to be on or off while charging
           </Text>
       </Section>
       <Section>
-          <Text bold align='center'>
-            Choose font color
+        <Text bold align='center'>
+          Choose font color
           </Text>
         <ColorSelect
           settingsKey='fontColor'
           centered={true}
-          colors={[
-            { color: "white" },
-            { color: "limegreen" },
-            { color: "springgreen" },
-            { color: "dodgerblue" },
-            { color: "orange" },
-            { color: "red" }
-          ]}
-          onSelection={value=>console.log(value)}
+          colors={colorSet}
         />
       </Section>
-      <Section>
+      {/* <Section>
         <Button
           label="Reset settings"
-          onClick={()=>props.settingsStorage.clear()}
+          onClick={() => {
+            console.log('reset pressed');
+            props.settingsStorage.clear();
+          }}
         />
-      </Section>
+      </Section> */}
     </Page>
   );
 }

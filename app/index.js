@@ -5,8 +5,8 @@ import { me } from 'appbit';
 import clock from 'clock';
 import document from 'document';
 import * as fs from 'fs';
-import * as messaging from 'messaging';
 import { convertDate, chargeColor, updateLastChargedDateField } from './utils';
+import * as settings from './device-settings';
 
 // DOM refs
 const batteryValue = document.getElementById('batteryValue');
@@ -29,17 +29,6 @@ let connectDate = null;
 let saveInterval = null;
 let displayOn = false;
 
-messaging.peerSocket.onmessage = e => {
-    if (e.data.key === 'toggle') {
-        // cancel interval so it's not recreated
-        clearInterval(saveInterval);
-        displayOn = e.data.value;
-        checkChargerConnectState();
-    }
-    if (e.data.key === 'fontColor') {
-        document.getElementsByTagName('text').forEach(element => element.style.fill = JSON.parse(e.data.value));
-    }
-}
 
 const updateChargeInfo = e => {
     let now = e ? e.date.valueOf() : new Date().valueOf();
@@ -48,13 +37,13 @@ const updateChargeInfo = e => {
     timeSinceLastCharge.text = charger.connected ? `Charging...` : `${day}d ${hr}h ${min}m`;
 }
 
-// init first page
+// ======== init first page ==========
 batteryValue.text = `${battery.chargeLevel}%`;
 batteryCharge.width = BATTERY_WIDTH * battery.chargeLevel / 100;
 batteryCharge.style.fill = chargeColor(battery.chargeLevel);
 connectState.text = charger.connected ? charger.powerIsGood ? 'Plugged in, charging' : 'Plugged in, not charging' : 'Unplugged';
 
-//init second page
+// ======== init second page ==========
 try {
     connectDate = fs.readFileSync('lastCharged.txt', 'cbor');
 } catch (e) {
@@ -80,13 +69,13 @@ const checkChargerConnectState = () => {
             fs.writeFileSync('lastCharged.txt', connectDate.valueOf(), 'cbor');
         }, 30000);
         me.appTimeoutEnabled = false;
-        //BELOW WILL BE AN OPTION FOR USER TO SET UP:
+
         if (displayOn) {
-            console.log('display is on');
+            console.log('[DISPLAY] is ON');
             display.autoOff = false;
             setInterval(() => display.poke(), 5000);
         } else {
-            console.log('display is off');
+            console.log('[DISPLAY] is OFF');
         }
         timeSinceLastCharge.text = `Charging...`;
     }
@@ -109,7 +98,24 @@ charger.onchange = evt => {
         fs.writeFileSync('lastCharged.txt', connectDate.valueOf(), 'cbor');
         me.appTimeoutEnabled = true;
         lastChargedDateField.text = updateLastChargedDateField(connectDate);
+        updateChargeInfo();
     }
 };
 
 checkChargerConnectState();
+
+// =========== SETTINGS ============= 
+const settingsCallback = data => {
+    if (!data) return;
+    if (data.display) {
+        // cancel interval so it's not recreated
+        clearInterval(saveInterval);
+        displayOn = data.display;
+        checkChargerConnectState();
+    }
+    if (data.fontColor) {
+        document.getElementsByTagName('text').forEach(element => element.style.fill = data.fontColor);
+    }
+}
+
+settings.initialize(settingsCallback);
